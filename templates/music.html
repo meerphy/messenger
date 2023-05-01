@@ -1,0 +1,47 @@
+{% extends "mainpage.html" %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>Music</title>
+    <link rel="stylesheet" href="static/css/dialogues.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="text">
+            <span class="logo">Music</span>
+        </div>
+        <audio controls="controls" autoplay="autoplay"></audio>
+        <form enctype="multipart/form-data" method="post" action="{{url_for('music')}}" >
+            <div class="buttons">
+                <label class="input-file">
+                    <input type="file" name="file">
+                    <span>File</span>
+                </label>
+                <label class="input-file">
+                    <input type="submit"/>
+                    <span>Save</span>
+                </label>
+            </div>
+        </form>
+        <ul>
+            {% for song in songs %}
+                <li><a href="javascript:void(0);" onclick="playSong('{{song[0]}}')" style="color: white;">{{song[0]}}</a></li>
+            {% endfor %}
+        </ul>
+        {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+        <div class="alert alert-danger">
+            <strong>Error!</strong><strong>{{message}}</strong>
+        </div>
+        {% endfor %}
+        {% endwith %}
+        <script type="text/javascript">
+            function playSong(song){
+                $('audio').attr('src', '/static/music/'+song);
+            }
+        </script>
+    </div>
+</body>
+{% endblock %}

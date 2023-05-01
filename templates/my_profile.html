@@ -1,0 +1,102 @@
+{% extends "mainpage.html" %}
+
+{% block content %}
+<head>
+    <title>My Profile</title>
+    <link rel="stylesheet" href="static/css/profile.css">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <section class="userProfile">
+            <div class="profile">
+                <figure><img src={{ user.avatar }} width="250px" height="250px"></figure>
+            </div>
+        </section>
+        <section class="about">
+            <li class="heading">Information</li>
+            <ul>
+                <li class="address">
+                    <h1 class="label">Address: </h1>
+                    <span class="info">{{ user.address }}</span>
+                </li>
+
+                <li class="email">
+                    <h1 class="label">E-mail: </h1>
+                    <span class="info">{{ user.email }}</span>
+                </li>
+
+                <li class="site">
+                    <h1 class="label">Site: </h1>
+                    <span class="info"></span>{{ user.site }}</span>
+                </li>
+                <li class="birthday">
+                    <h1 class="label">Birthday: </h1>
+                    <span class="info">{{ user.birthday }}</span>
+                </li>
+            </ul>
+        </section>
+        <section class="userDetails">
+            <div class="userName">
+                <h1 class="name">{{ user.name }} {{ user.surname }}</h1>
+            </div>
+                <ul class="buttons">
+                    <form method="post" enctype="multipart/form-data" style="display: flex; justify-content: space-between;">
+                        <label class="input-file">
+                            <input type="file" name="file">
+                            <span>File</span>
+                        </label>
+                        <label class="input-file">
+                            <input type="submit"/>
+                            <span>Save</span>
+                        </label>
+                    </form>
+                </ul>
+                <ul>
+                    <a href="/edit_my_profile" style="width: 60px;
+                            height: 40px;
+                            border-radius: 40px;
+                            background: #fff;
+                            border: none;
+                            outline: none;
+                            cursor: pointer;
+                            font-size: 1em;
+                            font-weight: 600;">
+                        <span class="text nav-text">Edit</span>
+                    </a>
+                </ul>
+        </section>
+        <section class="news">
+            <h1>Записи в блоге</h1>
+            {% if current_user.is_authenticated %}
+    <a href="news" class="btn btn-light">Добавить новость</a>
+{% endif %}
+            {% for item in news%}
+            <div class="form-box">
+                <h2>{{item.title}}</h2>
+                <div class="autor">
+                    Автор - {{item.user.name}}, Дата написания - {{item.created_date}}
+                </div>
+                <div class="content">
+                    {{item.content}}
+                </div>
+                {% if current_user.is_authenticated and current_user == item.user %}
+    <div>
+        <a href="/news&{{ item.id }}" class="btn btn-warning">
+            Изменить
+        </a>
+        <a href="/news_delete&{{ item.id }}" class="btn btn-danger">
+            Удалить
+        </a>
+    </div>
+{% endif %}
+            </div>
+            {% endfor %}
+        </section>
+    </div>
+</body>
+{% endblock %}
